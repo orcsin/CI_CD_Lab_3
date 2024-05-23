@@ -5,12 +5,13 @@ pipeline {
         stage('Checkout') {
             steps {
                 checkout scm
-                echo 'Checkout Example'
+                echo 'Checkout'
             }
         }
         stage('Build') {
             steps {
-                echo 'Building Example'
+                sh 'scripts/build.sh'
+                echo 'Building'
             }
         }
         stage('Test') {
