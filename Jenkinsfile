@@ -16,7 +16,8 @@ pipeline {
         }
         stage('Test') {
             steps {
-                echo 'Testing Example'
+		sh 'scripts/test.sh'
+                echo 'Testing'
             }
         }
         stage('Build docker image') {
