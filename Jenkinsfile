@@ -4,25 +4,26 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
                 echo 'Checkout'
+		checkout scm
             }
         }
         stage('Build') {
             steps {
-                sh 'scripts/build.sh'
                 echo 'Building'
+		sh 'scripts/build.sh'
             }
         }
         stage('Test') {
             steps {
+		echo 'Testing'
 		sh 'scripts/test.sh'
-                echo 'Testing'
             }
         }
         stage('Build docker image') {
             steps {
                 echo 'Build docker image'
+		sh 'docker build -t orcsin/nodemain:v1.0 .'		
             }
         }
         stage('Deploy') {
