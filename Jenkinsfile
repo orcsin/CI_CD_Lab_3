@@ -30,7 +30,7 @@ pipeline {
             steps {
                 echo 'Deploying Example'
 		script {
-			docker.withRegistry('', 'dockerhub-cicd')
+			docker.withRegistry('https://hub.docker.com', 'registryCredential')
 			{
 				docker.image("${registry}:${env.BUILD_NUMBER}").push("latest")
 			}
@@ -40,5 +40,6 @@ pipeline {
     }
     environment {
 	registry = 'orcsin/nodemain'
+	registryCredential = 'docker_id'
     }
 }
