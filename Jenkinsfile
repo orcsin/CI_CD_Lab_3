@@ -30,7 +30,7 @@ pipeline {
             steps {
                 echo 'Deploying Example'
 		script {
-			docker.withRegistry('https://hub.docker.com', 'docker_id')
+			docker.withRegistry('https://index.docker.io', 'docker_id')
 			{
 				docker.image("${registry}:${env.BUILD_NUMBER}").push("latest")
 			}
