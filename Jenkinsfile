@@ -29,7 +29,16 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying Example'
+		script {
+			docker.withRegistry('', 'dockerhub-cicd')
+			{
+				docker.image("${registry}:${env.BUILD_NUMBER}").push("latest")
+			}
+		}
             }
         }
+    }
+    environment {
+	registry = 'orcsin/nodemain'
     }
 }
