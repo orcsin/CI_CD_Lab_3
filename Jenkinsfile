@@ -26,16 +26,15 @@ pipeline {
 		script {
 			def myDockerImage = docker.build("${registry}:${env.BUILD_ID}")
 		}
-		// sh 'docker build -t orcsin/nodemain:v1.0 .'		
             }
         }
         stage('Deploy') {
             steps {
                 echo 'Deploying Example'
 		script {
-			docker.withRegistry('https://index.docker.io', 'docker_id')
-			{
-				docker.image("${registry}:${env.BUILD_NUMBER}").push("latest")
+			docker.withRegistry('https://index.docker.io', 'docker_id'){
+				// docker.image("${registry}:${env.BUILD_ID}").push("${env.BUILD_ID}")
+				myDockerImage.push('latest')
 			}
 		}
             }
