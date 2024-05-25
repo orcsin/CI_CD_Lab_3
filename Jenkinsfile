@@ -34,7 +34,7 @@ pipeline {
 		script {
 			docker.withRegistry('https://index.docker.io', 'docker_id'){
 				// docker.image("${registry}:${env.BUILD_ID}").push("${env.BUILD_ID}")
-				myDockerImage.push('latest')
+				docker.image("${myDockerImage}").push()
 			}
 		}
             }
