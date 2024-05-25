@@ -23,7 +23,9 @@ pipeline {
         stage('Build docker image') {
             steps {
                 echo 'Build docker image'
-		def myDockerImage = docker.build("${registry}:${env.BUILD_ID}")
+		script {
+			def myDockerImage = docker.build("${registry}:${env.BUILD_ID}")
+		}
 		// sh 'docker build -t orcsin/nodemain:v1.0 .'		
             }
         }
