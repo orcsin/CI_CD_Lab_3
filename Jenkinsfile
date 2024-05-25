@@ -32,9 +32,9 @@ pipeline {
             steps {
                 echo 'Deploying Example'
 		script {
-			docker.withRegistry('https://index.docker.io', 'docker_id'){
+			docker.withRegistry('https://index.docker.io', 'docker_id') {
 				// docker.image("${registry}:${env.BUILD_ID}").push("${env.BUILD_ID}")
-				docker.image("${myDockerImage}").push()
+				docker.image("${registry}:${env.BUILD_ID}").push('latest')
 			}
 		}
             }
