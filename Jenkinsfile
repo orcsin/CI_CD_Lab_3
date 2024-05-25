@@ -28,6 +28,14 @@ pipeline {
 		}
             }
         }
+	stage('Deploy') {
+		steps {
+			script {
+				def vulnerabilities = sh(script: "trivy image --exit-code 0 --severity HIGH,MEDIUM,LOW --no-progress ${registry}:${env.BUILD_ID}", returnStdout: true).trim()
+                    echo "Vulnerability report:\n${vulnerabilities}"
+			}
+		}
+	}
         stage('Deploy') {
             steps {
                 echo 'Deploying Example'
