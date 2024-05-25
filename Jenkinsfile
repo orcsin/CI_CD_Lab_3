@@ -23,7 +23,8 @@ pipeline {
         stage('Build docker image') {
             steps {
                 echo 'Build docker image'
-		sh 'docker build -t orcsin/nodemain:v1.0 .'		
+		def myDockerImage = docker.build("${registry}:${env.BUILD_ID}")
+		#sh 'docker build -t orcsin/nodemain:v1.0 .'		
             }
         }
         stage('Deploy') {
@@ -40,7 +41,7 @@ pipeline {
     }
     environment {
 	registry = 'orcsin/nodemain'
-	registryCredential = 'docker_id'
+	#registryCredential = 'docker_id'
     }
 }
 
