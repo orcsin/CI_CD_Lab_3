@@ -3,31 +3,31 @@ pipeline {
     environment {
 	    registryNamespace = "orcsin"
         repositoryName = "nodemain"
-        imageName = "${registryNamespace}/${repositoryName}_${env.BRANCH_NAME}"
+        imageName = "${registryNamespace}/${repositoryName}"
         registryCredential = 'docker_id'
         imageReference = ''
         dockerImage = ''
         branchName = ''
-
-        registry = 'orcsin/nodemain'
-
+        port = ''
     }
     stages {
         stage('Checkout') {
             steps {
                 echo 'Checkout'
-		checkout scm
+		        checkout scm
             }
         }
         stage('Build') {
             steps {
                 echo 'Building'
+                sh 'chmod +x ./scripts/build.sh'
 		        sh 'scripts/build.sh'
             }
         }
         stage('Test') {
             steps {
 		        echo 'Testing'
+                sh 'chmod +x ./scripts/test.sh'
 		        sh 'scripts/test.sh'
             }
         }
@@ -37,8 +37,7 @@ pipeline {
 		        script {
                     imageReference = "${imageName}:${BUILD_NUMBER}"
                     dockerImage = docker.build imageReference
-			        // def dockerImage = docker.build("${registry}:${env.BUILD_ID}")
-		        }
+			    }
             }
         }
 	    stage('Scan Docker Image for Vulnerabilities') {
@@ -54,8 +53,7 @@ pipeline {
                 echo 'Deploying Example'
 	    	    script {
 	    		    docker.withRegistry('', 'docker_id') {
-	    			    dockerImage.push()
-                        //docker.image("${registry}:${env.BUILD_ID}").push('latest')
+	    			    dockerImage.push('latest')
 	    		    }
 	    	    }
            }
@@ -70,8 +68,10 @@ pipeline {
                 } else if (branchName == 'main') {
                     postJobName = 'Deploy_to_main'
                 }
+
             }
-            build job: postJobName, parameters: [string(name: 'IMAGE_REFERENCE', value: imageReference)]
+            sh 'echo ${branchName}'
+            // build job: postJobName, parameters: [string(name: 'IMAGE_REFERENCE', value: imageReference)]
         }
     }
 }
