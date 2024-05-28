@@ -3,10 +3,11 @@ pipeline {
     environment {
 	    registryNamespace = "orcsin"
         repositoryName = "nodemain"
-        imageName = "${registryNamespace}/${repositoryName}_${BRANCH_NAME}"
+        imageName = "${registryNamespace}/${repositoryName}_${env.BRANCH_NAME}"
         registryCredential = 'docker_id'
         imageReference = ''
         dockerImage = ''
+        branchName = ''
 
         registry = 'orcsin/nodemain'
 
@@ -63,7 +64,7 @@ pipeline {
     post ('Start deploy pipeline') {
         success {
             script {
-                def branchName = env.BRANCH_NAME
+                branchName = env.BRANCH_NAME
                 if (branchName == 'dev') {
                     postJobName = 'Deploy_to_dev'
                 } else if (branchName == 'main') {
