@@ -70,7 +70,7 @@ pipeline {
                 }
 
             }
-            sh 'echo ${branchName}'
+            sh 'echo $branchName'
             // build job: postJobName, parameters: [string(name: 'IMAGE_REFERENCE', value: imageReference)]
         }
     }
