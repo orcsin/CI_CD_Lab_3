@@ -61,16 +61,16 @@ pipeline {
     }
     post ('Start deploy pipeline') {
         success {
-            script {
-                branchName = env.BRANCH_NAME
-                if (branchName == 'dev') {
-                    port = 3000
-                } else if (branchName == 'main') {
-                    port = 3001
-                }
-
-            }
             steps {
+                script {
+                    branchName = env.BRANCH_NAME
+                    if (branchName == 'dev') {
+                        port = 3000
+                    } else if (branchName == 'main') {
+                        port = 3001
+                    }
+
+                }
                 echo "PORT = ${port}"
                 sh 'echo ${branchName}'
             }
