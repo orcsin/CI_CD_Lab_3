@@ -64,13 +64,16 @@ pipeline {
             script {
                 branchName = env.BRANCH_NAME
                 if (branchName == 'dev') {
-                    postJobName = 'Deploy_to_dev'
+                    port = 3000
                 } else if (branchName == 'main') {
-                    postJobName = 'Deploy_to_main'
+                    port = 3001
                 }
 
             }
-            sh 'echo $branchName'
+            steps {
+                echo "PORT = ${port}"
+                sh 'echo ${branchName}'
+            }
             // build job: postJobName, parameters: [string(name: 'IMAGE_REFERENCE', value: imageReference)]
         }
     }
