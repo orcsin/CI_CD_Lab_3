@@ -61,21 +61,18 @@ pipeline {
     }
     post ('Start deploy pipeline') {
         success {
-            steps {
-                script {
-                    branchName = env.BRANCH_NAME
-                    if (branchName == 'dev') {
-                        port = 3000
-                    } else if (branchName == 'main') {
-                        port = 3001
-                    }
-
+            script {
+                branchName = env.BRANCH_NAME
+                if (branchName == 'dev') {
+                    port = 3000
+                } else if (branchName == 'main') {
+                    port = 3001
                 }
                 echo "PORT = ${port}"
                 sh 'echo ${branchName}'
-            }
-            // build job: postJobName, parameters: [string(name: 'IMAGE_REFERENCE', value: imageReference)]
+            } 
         }
+            // build job: postJobName, parameters: [string(name: 'IMAGE_REFERENCE', value: imageReference)]
     }
 }
 
