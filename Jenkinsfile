@@ -68,8 +68,8 @@ pipeline {
                 } else if (branchName == 'main') {
                     port = 3001
                 }
-                echo "PORT = ${port}"
-                sh 'echo ${branchName}'
+                //echo "PORT = ${port}"
+                //sh 'echo ${branchName}'
             } 
         }
             // build job: postJobName, parameters: [string(name: 'IMAGE_REFERENCE', value: imageReference)]
