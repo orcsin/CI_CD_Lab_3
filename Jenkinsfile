@@ -35,7 +35,6 @@ pipeline {
             steps {
                 echo 'Build docker image'
 		        script {
-                    docker images -a | grep ${imageName} | awk '{print $3}' | xargs docker rmi -f
                     imageReference = "${imageName}:${BUILD_NUMBER}"
                     dockerImage = docker.build imageReference
 			    }
@@ -54,9 +53,10 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying Example'
-                //sh 'docker images -a | grep ${imageName} | awk '{print $3}' | xargs docker rmi -f'
+                
 	    	    script {
 	    		    docker.withRegistry('', 'docker_id') {
+                        sh 'docker images -a | grep ${imageName} | awk '{print $3}' | xargs docker rmi -f'
 	    			    dockerImage.push('latest')
                         //dockerImage.push("${BUILD_NUMBER}")
 	    		    }
