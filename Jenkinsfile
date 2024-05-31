@@ -3,7 +3,7 @@ pipeline {
     environment {
 	    registryNamespace = "orcsin"
         repositoryName = "nodedev"
-        registry = "${registryNamespace}/${repositoryName}"
+        imageName = "${registryNamespace}/${repositoryName}"
         registryCredential = 'docker_id'
         imageReference = ''
         dockerImage = ''
@@ -53,12 +53,10 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying Example'
-                echo "${dockerImage}"
 	    	    script {
 	    		    docker.withRegistry('', 'docker_id') {
-                        docker.image("${registry}:${BUILD_NUMBER}").push('latest')
-	    			    //dockerImage.push('latest')
-                        //dockerImage.push("${BUILD_NUMBER}")
+	    			    dockerImage.push('latest')
+                        dockerImage.push("${BUILD_NUMBER}")
 	    		    }
 	    	    }
            }
