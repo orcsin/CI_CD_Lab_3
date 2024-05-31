@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
 	    registryNamespace = "orcsin"
-        repositoryName = "nodemain"
+        repositoryName = "nodedev"
         imageName = "${registryNamespace}/${repositoryName}"
         registryCredential = 'docker_id'
         imageReference = ''
@@ -35,11 +35,12 @@ pipeline {
             steps {
                 echo 'Build docker image'
 		        script {
-                    imageReference = "${imageName}:${BUILD_NUMBER}"
+                    imageReference = "${repositoryName}:${BUILD_NUMBER}"
                     dockerImage = docker.build imageReference
 			    }
             }
         }
+/*
 	    stage('Scan Docker Image for Vulnerabilities') {
 		    steps {
 		    	script {
@@ -48,12 +49,14 @@ pipeline {
 			    }
 		    }
 	    }
+*/
         stage('Deploy') {
             steps {
                 echo 'Deploying Example'
 	    	    script {
 	    		    docker.withRegistry('', 'docker_id') {
 	    			    dockerImage.push('latest')
+                        dockerImage.push("${BUILD_NUMBER}")
 	    		    }
 	    	    }
            }
