@@ -53,6 +53,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying Example'
+                echo "${dockerImage}"
 	    	    script {
 	    		    docker.withRegistry('', 'docker_id') {
 	    			    dockerImage.push('latest')
