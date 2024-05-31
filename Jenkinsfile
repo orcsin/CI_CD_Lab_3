@@ -7,8 +7,6 @@ pipeline {
         registryCredential = 'docker_id'
         imageReference = ''
         dockerImage = ''
-        branchName = ''
-        port = ''
     }
     stages {
         stage('Checkout') {
@@ -35,11 +33,12 @@ pipeline {
             steps {
                 echo 'Build docker image'
 		        script {
-                    imageReference = "${imageName}:${BUILD_NUMBER}"
+                    imageReference = "${imageName}:v1.0"
                     dockerImage = docker.build imageReference
 			    }
             }
         }
+/*
 	    stage('Scan Docker Image for Vulnerabilities') {
 		    steps {
 		    	script {
@@ -48,31 +47,24 @@ pipeline {
 			    }
 		    }
 	    }
+*/
         stage('Deploy') {
             steps {
                 echo 'Deploying Example'
+                
 	    	    script {
 	    		    docker.withRegistry('', 'docker_id') {
-	    			    dockerImage.push('latest')
+                        dockerImage.push('latest')
 	    		    }
 	    	    }
            }
         }
     }
-    post ('Start deploy pipeline') {
+    post ('Clean docker image') {
         success {
             script {
-                branchName = env.BRANCH_NAME
-                if (branchName == 'dev') {
-                    port = 3000
-                } else if (branchName == 'main') {
-                    port = 3001
-                }
-                //echo "PORT = ${port}"
-                //sh 'echo ${branchName}'
+                sh 'docker rmi orcsin/nodemain:v1.0'
             } 
         }
-            // build job: postJobName, parameters: [string(name: 'IMAGE_REFERENCE', value: imageReference)]
     }
 }
-
