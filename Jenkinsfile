@@ -56,7 +56,7 @@ pipeline {
                 
 	    	    script {
 	    		    docker.withRegistry('', 'docker_id') {
-                        sh 'docker images -a | grep ${imageName} | awk '{print $3}' | xargs docker rmi -f'
+                        //sh 'docker images -a | grep ${imageName} | awk '{print $3}' | xargs docker rmi -f'
 	    			    dockerImage.push('latest')
                         //dockerImage.push("${BUILD_NUMBER}")
 	    		    }
@@ -67,6 +67,7 @@ pipeline {
     post ('Start deploy pipeline') {
         success {
             script {
+                sh 'docker rmi orcsin/nodedev:v1.0'
                 branchName = env.BRANCH_NAME
                 if (branchName == 'dev') {
                     port = 3000
