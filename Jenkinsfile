@@ -35,7 +35,7 @@ pipeline {
             steps {
                 echo 'Build docker image'
 		        script {
-                    imageReference = "${repositoryName}:${BUILD_NUMBER}"
+                    imageReference = "${imageName}:${BUILD_NUMBER}"
                     dockerImage = docker.build imageReference
 			    }
             }
