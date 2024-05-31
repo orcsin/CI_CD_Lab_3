@@ -53,10 +53,11 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying Example'
+                sh 'docker images -a | grep ${imageName} | awk '{print $3}' | xargs docker rmi -f'
 	    	    script {
 	    		    docker.withRegistry('', 'docker_id') {
 	    			    dockerImage.push('latest')
-                        dockerImage.push("${BUILD_NUMBER}")
+                        //dockerImage.push("${BUILD_NUMBER}")
 	    		    }
 	    	    }
            }
