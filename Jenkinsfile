@@ -34,7 +34,9 @@ pipeline {
                 when {
                     branch 'main'
                 }
-            sh 'echo 'EXPOSE 3000' >> Dockerfile'
+                steps {
+                    sh 'echo 'EXPOSE 3000' >> Dockerfile'
+                }
             }
         }
         stage('Build docker image') {
