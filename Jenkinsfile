@@ -29,7 +29,7 @@ pipeline {
 		        sh 'scripts/test.sh'
             }
         }
-        stage('change a port for main'){
+        /*stage('change a port for main'){
             //steps {
                 when {
                     branch 'main'
@@ -38,7 +38,7 @@ pipeline {
                     sh "echo 'EXPOSE 3000' >> Dockerfile"
                 }
             //}
-        }
+        */}
         stage('Build docker image') {
             steps {
                 echo 'Build docker image'
