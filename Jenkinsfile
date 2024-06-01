@@ -81,8 +81,7 @@ pipeline {
                     postJobName = 'Deploy_to_main'
                 }
                 build job: postJobName, parameters: [string(name: 'IMAGE_REFERENCE', value: imageReference)]
-        }
-            } 
+            }
         }
     }
 }
