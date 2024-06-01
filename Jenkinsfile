@@ -30,14 +30,14 @@ pipeline {
             }
         }
         stage('change a port for main'){
-            steps {
+            //steps {
                 when {
                     branch 'main'
                 }
                 steps {
                     sh "echo 'EXPOSE 3000' >> Dockerfile"
                 }
-            }
+            //}
         }
         stage('Build docker image') {
             steps {
