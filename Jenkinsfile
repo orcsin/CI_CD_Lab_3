@@ -35,7 +35,7 @@ pipeline {
                     branch 'main'
                 }
                 steps {
-                    sh 'echo 'EXPOSE 3000' >> Dockerfile'
+                    sh "echo 'EXPOSE 3000' >> Dockerfile"
                 }
             }
         }
