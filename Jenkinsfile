@@ -74,6 +74,14 @@ pipeline {
         success {
             script {
                 sh 'docker rmi orcsin/nodemain:v1.0'
+                def branchName = env.BRANCH_NAME
+                if (branchName == 'dev') {
+                    postJobName = 'Deploy_to_dev'
+                } else if (branchName == 'main') {
+                    postJobName = 'Deploy_to_main'
+                }
+                build job: postJobName, parameters: [string(name: 'IMAGE_REFERENCE', value: imageReference)]
+        }
             } 
         }
     }
