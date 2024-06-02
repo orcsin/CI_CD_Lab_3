@@ -4,6 +4,7 @@ pipeline {
 	    registryNamespace = "orcsin"
         repositoryName = "nodemain"
         imageName = "${registryNamespace}/${repositoryName}"
+        registryDocker = "orcsin/lab3"
         registryCredential = 'docker_id'
         imageReference = ''
         dockerImage = ''
