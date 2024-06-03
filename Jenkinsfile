@@ -14,8 +14,9 @@ pipeline {
         //dockerImageName = ""
         registryDocker = "orcsin/lab3"
         registryCredential = 'docker_id'
-        imageReference = ''
         dockerImage = ''
+
+        imageReference = ''
     }
 
     //triggers{ cron('H/1 * * * *') }
@@ -70,7 +71,7 @@ pipeline {
 		    }
 	    }
 */
-        /*
+        
         stage('Deploy') {
             steps {
                 echo 'Deploying Example'
@@ -78,7 +79,8 @@ pipeline {
 	    	    script {
                     sh 'docker stop $(docker ps -aq)'
                     sh 'docker rm $(docker ps -aq)'
-
+                    sh "docker run -d --expose 3000 -p 3000:3000 node${params.environment}:${params.tag}" 
+                    /*
                     def port = ""
                     if (env.BRANCH_NAME == 'main') {
                         port = '3000'
@@ -90,11 +92,11 @@ pipeline {
 	    		    
                     docker.withRegistry('', 'docker_id') {
                         dockerImage.push('latest')
-	    		    
+	    		    */
                 }
 	    	}
         }
-        */
+        
     }
 
 
