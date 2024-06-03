@@ -4,6 +4,7 @@ pipeline {
 	    registryNamespace = "orcsin"
         repositoryName = "nodemain"
         imageName2 = "${registryNamespace}/${repositoryName}"
+        imageName3 = "${repositoryName}"
         //imageName = ""
         registryDocker = "orcsin/lab3"
         registryCredential = 'docker_id'
@@ -45,7 +46,7 @@ pipeline {
                         imageName = 'nodedev'
                     }
                     //sh "docker build -t ${imageName}:v1.0 ."
-                    imageReference = "${imageName2}:v1.0"
+                    imageReference = "${imageName3}:v1.0"
                     dockerImage = docker.build imageReference
 			    }
             }
