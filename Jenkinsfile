@@ -16,7 +16,6 @@ pipeline {
         registryCredential = 'docker_id'
         imageReference = ''
         dockerImage = ''
-        test = ${params.tag}
     }
 
     //triggers{ cron('H/1 * * * *') }
@@ -25,6 +24,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo 'Checkout'
+                echo "Hello $params.environment"
 		        checkout scm
             }
         }
