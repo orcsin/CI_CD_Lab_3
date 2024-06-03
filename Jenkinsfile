@@ -77,7 +77,8 @@ pipeline {
                 echo 'Deploying Example'
                 
 	    	    script {
-                    sh "docker stop $(docker ps -aq)"
+                    //sh "docker stop $(docker ps -aq)"
+                    sh "docker container kill $(docker ps -q) "
                     sh "docker rm $(docker ps -aq)"
                     sh "docker run -d --expose 3000 -p 3000:3000 node${params.environment}:${params.tag}" 
                     /*
