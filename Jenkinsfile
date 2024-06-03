@@ -39,14 +39,14 @@ pipeline {
             steps {
                 echo 'Build docker image'
 		        script {
-                    //def imageName = ""
+                    imageName = ""
                     if (env.BRANCH_NAME == 'main') {
-                        dockerImageName = 'nodemain'
+                        imageName = 'nodemain'
                     } else if (env.BRANCH_NAME == 'dev') {
-                        dockerImageName = 'nodedev'
+                        imageName = 'nodedev'
                     }
                     //sh "docker build -t ${imageName}:v1.0 ."
-                    imageReference = "${dockerImageName}:v1.0"
+                    imageReference = "${imageName}:v1.0"
                     dockerImage = docker.build imageReference
 			    }
             }
