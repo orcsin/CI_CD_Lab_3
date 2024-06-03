@@ -1,4 +1,8 @@
 pipeline {
+    parameters {
+        choice(name: 'environment', choices: ['main', 'dev'], description: 'deploying environmanet')
+        choice(name: 'tag', choices: ['v1.0', 'v1.1'], description: 'tag')
+    }
     agent any
     environment {
 	    registryNamespace = "orcsin"
