@@ -54,9 +54,9 @@ pipeline {
                     sh "echo ${dockerImageName}"
                     sh "docker build -t node${params.environment}:${params.tag} ."
                     //sh "docker build -t ${imageName}:v1.0 ."
-                    //imageReference = "${dockerImageName}:v1.0"
-                    //sh "echo ${imageReference}"
-                    //dockerImage = docker.build imageReference
+
+                    imageReference = "node${params.environment}:${params.tag}"
+                    dockerImage = docker.build imageReference
 			    }
             }
         }
