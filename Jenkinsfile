@@ -5,7 +5,7 @@ pipeline {
         repositoryName = "nodemain"
         imageName2 = "${registryNamespace}/${repositoryName}"
         imageName3 = "${repositoryName}"
-        //imageName = ""
+        imageName = ""
         registryDocker = "orcsin/lab3"
         registryCredential = 'docker_id'
         imageReference = ''
@@ -39,14 +39,14 @@ pipeline {
             steps {
                 echo 'Build docker image'
 		        script {
-                    def imageName = ""
+                    //def imageName = ""
                     if (env.BRANCH_NAME == 'main') {
                         imageName = 'nodemain'
                     } else if (env.BRANCH_NAME == 'dev') {
                         imageName = 'nodedev'
                     }
                     //sh "docker build -t ${imageName}:v1.0 ."
-                    imageReference = "${repositoryName}:v1.0"
+                    imageReference = "${imageName}:v1.0"
                     dockerImage = docker.build imageReference
 			    }
             }
@@ -61,6 +61,7 @@ pipeline {
 		    }
 	    }
 */
+        /*
         stage('Deploy') {
             steps {
                 echo 'Deploying Example'
@@ -77,12 +78,14 @@ pipeline {
                     }
                     sh "docker run -d --expose ${port} -p ${port}:3000 ${imageName}"
 
-	    		    /*docker.withRegistry('', 'docker_id') {
+	    		    
+                    docker.withRegistry('', 'docker_id') {
                         dockerImage.push('latest')
-	    		    */
+	    		    
                 }
 	    	}
         }
+        */
     }
 
 
