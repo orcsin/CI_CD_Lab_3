@@ -74,7 +74,7 @@ pipeline {
                     } else if (env.BRANCH_NAME == 'dev') {
                         port = '3001'
                     }
-                    sh "docker run -d --expose ${port} -p ${port}:3000 ${imageName}
+                    sh "docker run -d --expose ${port} -p ${port}:3000 ${imageName}"
 
 	    		    docker.withRegistry('', 'docker_id') {
                         dockerImage.push('latest')
