@@ -65,8 +65,8 @@ pipeline {
                 echo 'Deploying Example'
                 
 	    	    script {
-                    sh "docker stop $(docker ps -aq)"
-                    sh "docker rm $(docker ps -aq)"
+                    sh 'docker stop $(docker ps -aq)'
+                    sh 'docker rm $(docker ps -aq)'
 
                     def port = ""
                     if (env.BRANCH_NAME == 'main') {
@@ -76,13 +76,15 @@ pipeline {
                     }
                     sh "docker run -d --expose ${port} -p ${port}:3000 ${imageName}"
 
-	    		    docker.withRegistry('', 'docker_id') {
+	    		    /*docker.withRegistry('', 'docker_id') {
                         dockerImage.push('latest')
-	    		    }
+	    		    */
+                    }
 	    	    }
            }
         }
     }
+
 
     /*
     post ('Clean docker image') {
