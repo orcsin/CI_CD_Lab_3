@@ -45,8 +45,10 @@ pipeline {
                     } else if (env.BRANCH_NAME == 'dev') {
                         dockerImageName = "nodedev"
                     }
+                    sh "echo ${dockerImageName}"
                     //sh "docker build -t ${imageName}:v1.0 ."
                     imageReference = "${dockerImageName}:v1.0"
+                    sh "echo ${imageReference}"
                     dockerImage = docker.build imageReference
 			    }
             }
