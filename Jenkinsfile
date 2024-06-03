@@ -24,7 +24,6 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo 'Checkout'
-                echo "Hello $params.environment"
 		        checkout scm
             }
         }
@@ -53,10 +52,11 @@ pipeline {
                         dockerImageName = "nodedev"
                     }
                     sh "echo ${dockerImageName}"
+                    sh "docker build -t node${params.environment}:${params.tag} ."
                     //sh "docker build -t ${imageName}:v1.0 ."
-                    imageReference = "${dockerImageName}:v1.0"
-                    sh "echo ${imageReference}"
-                    dockerImage = docker.build imageReference
+                    //imageReference = "${dockerImageName}:v1.0"
+                    //sh "echo ${imageReference}"
+                    //dockerImage = docker.build imageReference
 			    }
             }
         }
