@@ -1,9 +1,11 @@
 pipeline {
+    agent any
+
     parameters {
         choice(name: 'environment', choices: ['main', 'dev'], description: 'deploying environmanet')
         choice(name: 'tag', choices: ['v1.0', 'v1.1'], description: 'tag')
     }
-    agent any
+    
     environment {
 	    registryNamespace = "orcsin"
         repositoryName = "nodemain"
@@ -14,6 +16,7 @@ pipeline {
         registryCredential = 'docker_id'
         imageReference = ''
         dockerImage = ''
+        test = $params.tag
     }
 
     //triggers{ cron('H/1 * * * *') }
