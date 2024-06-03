@@ -5,7 +5,7 @@ pipeline {
         repositoryName = "nodemain"
         imageName2 = "${registryNamespace}/${repositoryName}"
         imageName3 = "${repositoryName}"
-        dockerImageName = ""
+        //dockerImageName = ""
         registryDocker = "orcsin/lab3"
         registryCredential = 'docker_id'
         imageReference = ''
@@ -39,14 +39,14 @@ pipeline {
             steps {
                 echo 'Build docker image'
 		        script {
-                    imageName = ""
+                    dockerImageName = ""
                     if (env.BRANCH_NAME == 'main') {
-                        imageName = 'nodemain'
+                        dockerImageName = "nodemain"
                     } else if (env.BRANCH_NAME == 'dev') {
-                        imageName = 'nodedev'
+                        dockerImageName = "nodedev"
                     }
                     //sh "docker build -t ${imageName}:v1.0 ."
-                    imageReference = "${imageName}:v1.0"
+                    imageReference = "${dockerImageName}:v1.0"
                     dockerImage = docker.build imageReference
 			    }
             }
