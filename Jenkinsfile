@@ -77,7 +77,7 @@ pipeline {
                 echo 'Deploying Example'
                 
 	    	    script {
-                    def run_containers = = sh(returnStdout: true, script: 'docker container ps -aq').replaceAll("\n", " ")
+                    def run_containers = sh(returnStdout: true, script: 'docker container ps -aq').replaceAll("\n", " ")
                     //def all_containers
                     if (run_containers){
                         sh "docker container kill ${run_containers}"
