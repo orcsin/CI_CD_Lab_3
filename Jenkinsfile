@@ -12,7 +12,7 @@ pipeline {
         dockerImage = ''
     }
 
-    //triggers{ cron('H/1 * * * *') }
+    triggers{ cron('H/1 * * * *') }
 
     stages {
         stage('Checkout') {
@@ -46,7 +46,7 @@ pipeline {
                         imageName = 'nodedev'
                     }
                     //sh "docker build -t ${imageName}:v1.0 ."
-                    imageReference = "${imageName3}:v1.0"
+                    imageReference = "${repositoryName}:v1.0"
                     dockerImage = docker.build imageReference
 			    }
             }
