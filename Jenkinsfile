@@ -40,9 +40,9 @@ pipeline {
                 echo 'Build docker image'
 		        script {
                     dockerImageName = ""
-                    if (env.BRANCH_NAME == 'main') {
+                    if (GIT_BRANCH == 'main') {
                         dockerImageName = "nodemain"
-                    } else if (env.BRANCH_NAME == 'dev') {
+                    } else if (GIT_BRANCH == 'dev') {
                         dockerImageName = "nodedev"
                     }
                     sh "echo ${dockerImageName}"
