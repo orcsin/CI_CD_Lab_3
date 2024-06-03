@@ -16,7 +16,7 @@ pipeline {
         registryCredential = 'docker_id'
         imageReference = ''
         dockerImage = ''
-        test = $params.tag
+        test = ${params.tag}
     }
 
     //triggers{ cron('H/1 * * * *') }
