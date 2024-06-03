@@ -2,13 +2,17 @@ pipeline {
     agent any
     environment {
 	    registryNamespace = "orcsin"
-        repositoryName = "nodemain"
-        imageName = "${registryNamespace}/${repositoryName}"
+        //repositoryName = "nodemain"
+        //imageName = "${registryNamespace}/${repositoryName}"
+        imageName = ""
         registryDocker = "orcsin/lab3"
         registryCredential = 'docker_id'
         imageReference = ''
         dockerImage = ''
     }
+
+    //triggers{ cron('H/1 * * * *') }
+
     stages {
         stage('Checkout') {
             steps {
@@ -30,22 +34,19 @@ pipeline {
 		        sh 'scripts/test.sh'
             }
         }
-        /*stage('change a port for main'){
-            //steps {
-                when {
-                    branch 'main'
-                }
-                steps {
-                    sh "echo 'EXPOSE 3000' >> Dockerfile"
-                }
-            //}
-        */}
         stage('Build docker image') {
             steps {
                 echo 'Build docker image'
 		        script {
-                    imageReference = "${imageName}:v1.0"
-                    dockerImage = docker.build imageReference
+                    //def imageName = ""
+                    if (env.BRANCH_NAME == 'main') {
+                        imageName = 'nodemain:v1.0'
+                    } else if (env.BRANCH_NAME == 'dev') {
+                        imageName = 'nodedev:v1.0'
+                    }
+                    sh "docker image build -t ${imageName} ."
+                    //imageReference = "${imageName}:v1.0"
+                    //dockerImage = docker.build imageReference
 			    }
             }
         }
@@ -64,6 +65,17 @@ pipeline {
                 echo 'Deploying Example'
                 
 	    	    script {
+                    sh "docker stop $(docker ps -aq)"
+                    sh "docker rm $(docker ps -aq)"
+
+                    def port = ""
+                    if (env.BRANCH_NAME == 'main') {
+                        port = '3000'
+                    } else if (env.BRANCH_NAME == 'dev') {
+                        port = '3001'
+                    }
+                    sh "docker run -d --expose ${port} -p ${port}:3000 ${imageName}
+
 	    		    docker.withRegistry('', 'docker_id') {
                         dockerImage.push('latest')
 	    		    }
@@ -71,6 +83,8 @@ pipeline {
            }
         }
     }
+
+    /*
     post ('Clean docker image') {
         success {
             script {
@@ -85,4 +99,5 @@ pipeline {
             }
         }
     }
+    */
 }
