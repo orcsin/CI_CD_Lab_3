@@ -40,11 +40,11 @@ pipeline {
 		        script {
                     def imageName = ""
                     if (env.BRANCH_NAME == 'main') {
-                        imageName = 'nodemain:v1.0'
+                        imageName = 'nodemain'
                     } else if (env.BRANCH_NAME == 'dev') {
-                        imageName = 'nodedev:v1.0'
+                        imageName = 'nodedev'
                     }
-                    sh "docker build -t ${imageName} ."
+                    sh "docker build -t ${imageName}:v1.0 ."
                     //imageReference = "${imageName}:v1.0"
                     //dockerImage = docker.build imageReference
 			    }
