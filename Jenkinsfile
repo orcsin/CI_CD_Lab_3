@@ -52,8 +52,8 @@ pipeline {
                     } else if (GIT_BRANCH == 'dev') {
                         dockerImageName = "nodedev"
                     }
-                    sh "echo ${dockerImageName}"
-                    sh "docker build -t node${params.environment}:${params.tag} ."
+                    //sh "echo ${dockerImageName}"
+                    //sh "docker build -t node${params.environment}:${params.tag} ."
                     //sh "docker build -t ${imageName}:v1.0 ."
 
                     imageReference = "node${params.environment}:${params.tag}"
@@ -77,8 +77,8 @@ pipeline {
                 echo 'Deploying Example'
                 
 	    	    script {
-                    sh 'docker stop $(docker ps -aq)'
-                    sh 'docker rm $(docker ps -aq)'
+                    sh "docker stop $(docker ps -aq)"
+                    sh "docker rm $(docker ps -aq)"
                     sh "docker run -d --expose 3000 -p 3000:3000 node${params.environment}:${params.tag}" 
                     /*
                     def port = ""
