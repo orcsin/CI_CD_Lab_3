@@ -5,14 +5,14 @@ pipeline {
         repositoryName = "nodemain"
         imageName2 = "${registryNamespace}/${repositoryName}"
         imageName3 = "${repositoryName}"
-        imageName = ""
+        dockerImageName = ""
         registryDocker = "orcsin/lab3"
         registryCredential = 'docker_id'
         imageReference = ''
         dockerImage = ''
     }
 
-    triggers{ cron('H/1 * * * *') }
+    //triggers{ cron('H/1 * * * *') }
 
     stages {
         stage('Checkout') {
@@ -41,12 +41,12 @@ pipeline {
 		        script {
                     //def imageName = ""
                     if (env.BRANCH_NAME == 'main') {
-                        imageName = 'nodemain'
+                        dockerImageName = 'nodemain'
                     } else if (env.BRANCH_NAME == 'dev') {
-                        imageName = 'nodedev'
+                        dockerImageName = 'nodedev'
                     }
                     //sh "docker build -t ${imageName}:v1.0 ."
-                    imageReference = "${imageName}:v1.0"
+                    imageReference = "${dockerImageName}:v1.0"
                     dockerImage = docker.build imageReference
 			    }
             }
