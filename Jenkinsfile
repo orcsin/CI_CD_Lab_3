@@ -79,9 +79,8 @@ pipeline {
 	    		    /*docker.withRegistry('', 'docker_id') {
                         dockerImage.push('latest')
 	    		    */
-                    }
-	    	    }
-           }
+                }
+	    	}
         }
     }
 
