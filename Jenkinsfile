@@ -68,7 +68,7 @@ pipeline {
                     if (run_containers){
                         sh "docker container kill ${run_containers}"
                     }
-                    sh "docker ps -a | grep "nodemain" | awk '{print \$3}' | xargs docker rmi"
+                    sh "docker ps -a | grep "nodemain" | awk '{print ${3}}' | xargs docker rmi"
                     //if (all_containers){
                     //    sh "docker container rm ${all_containers}"
                     //}              
