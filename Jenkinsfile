@@ -86,7 +86,7 @@ pipeline {
                         sh "docker container rm ${all_containers}"
                     }
 
-                    def port = ""
+                    def port = "3000"
                     if (env.BRANCH_NAME == 'main') {
                         port = '3000'
                     } else if (env.BRANCH_NAME == 'dev') {
