@@ -45,7 +45,7 @@ pipeline {
 			    }
             }
         }
-/*
+
 	    stage('Scan Docker Image for Vulnerabilities') {
 		    steps {
 		    	script {
@@ -54,7 +54,7 @@ pipeline {
 			    }
 		    }
 	    }
-*/
+
         
         stage('Deploy') {
             steps {
