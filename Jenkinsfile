@@ -80,7 +80,7 @@ pipeline {
                     if (all_containers){
                         sh "docker container rm ${all_containers}"
                     }
-
+/*
                     def port = "3000"
                     if (env.BRANCH_NAME == 'main') {
                         port = '3000'
@@ -89,16 +89,17 @@ pipeline {
                     }
 
                     sh "docker run -d --expose ${port} -p ${port}:3000 node${params.environment}:${params.tag}" 
-                    /*
+*/                   
+                    
                     def port = ""
                     if (env.BRANCH_NAME == 'main') {
                         port = '3000'
                     } else if (env.BRANCH_NAME == 'dev') {
                         port = '3001'
                     }
-                    sh "docker run -d --expose ${port} -p ${port}:3000 ${imageName}"
+                    sh "docker run -d --expose ${port} -p ${port}:3000 ${imageReference}"
 
-	    		    */
+	    		    
                     //dockerImage = "${registryNamespace}/${imageReference}"
                     //sh "echo ${dockerImage}"
                     //docker.withRegistry('', 'docker_id') {
