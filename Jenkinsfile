@@ -46,16 +46,13 @@ pipeline {
             steps {
                 echo 'Build docker image'
 		        script {
-                    dockerImageName = ""
+                    /*
                     if (env.BRANCH_NAME == 'main') {
                         params.environment = "main"
                     } else if (env.BRANCH_NAME == 'dev') {
                         params.environment = "dev"
                     }
-                    //sh "echo ${dockerImageName}"
-                    //sh "docker build -t node${params.environment}:${params.tag} ."
-                    //sh "docker build -t ${imageName}:v1.0 ."
-
+                    */
                     imageReference = "node${params.environment}:${params.tag}"
                     dockerImage = docker.build imageReference
 			    }
