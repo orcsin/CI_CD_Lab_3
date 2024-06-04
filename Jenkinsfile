@@ -69,7 +69,7 @@ pipeline {
                         sh "docker container kill ${run_containers}"
                     }
                     if (all_containers){
-                        sh "docker container rm ${all_containers_pattern}"
+                        sh "docker container rm ${all_containers_pattern} | true"
                     }              
                     
                     def port = ""
