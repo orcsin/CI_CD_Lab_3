@@ -83,7 +83,7 @@ pipeline {
                         sh "docker container kill ${run_containers}"
                     }
                     if (all_containers){
-                        sh "docker container rm ${run_containers}"
+                        sh "docker container rm ${all_containers}"
                     }
                     //sh "docker stop $(docker ps -aq)"
                     //sh "docker container kill \$(docker ps -q)"
