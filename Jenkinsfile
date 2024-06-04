@@ -64,14 +64,13 @@ pipeline {
 	    	    script {
                     def run_containers = sh(returnStdout: true, script: 'docker container ps -q').replaceAll("\n", " ")
                     def all_containers = sh(returnStdout: true, script: 'docker container ps -aq').replaceAll("\n", " ")
-                    //def all_containers = sh(returnStdout: true, script: 'docker container ps -aq').replaceAll("\n", " ")
+                    def all_containers_pattern = sh(returnStdout: true, script: 'docker ps -q --filter "ancestor=nodemain:v1.0"').replaceAll("\n", " ")
                     if (run_containers){
                         sh "docker container kill ${run_containers}"
                     }
-                    sh "docker ps -a | grep "nodemain" | awk '{print ${3}}' | xargs docker rmi"
-                    //if (all_containers){
-                    //    sh "docker container rm ${all_containers}"
-                    //}              
+                    if (all_containers){
+                        sh "docker container rm ${all_containers_pattern}"
+                    }              
                     
                     def port = ""
                     if (env.BRANCH_NAME == 'main') {
