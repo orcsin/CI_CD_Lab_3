@@ -47,9 +47,9 @@ pipeline {
                 echo 'Build docker image'
 		        script {
                     dockerImageName = ""
-                    if (GIT_BRANCH == 'main') {
+                    if (BRANCH_NAME == 'main') {
                         params.environment = "main"
-                    } else if (GIT_BRANCH == 'dev') {
+                    } else if (BRANCH_NAME == 'dev') {
                         params.environment = "dev"
                     }
                     //sh "echo ${dockerImageName}"
