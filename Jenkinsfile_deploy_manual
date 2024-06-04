@@ -7,16 +7,10 @@ pipeline {
     }
     
     environment {
-	    registryNamespace = "orcsin"
-        repositoryName = "nodemain"
-        imageName2 = "${registryNamespace}/${repositoryName}"
-        imageName3 = "${repositoryName}"
-        //dockerImageName = ""
         registryDocker = "orcsin/lab3"
         registryCredential = 'docker_id'
-        dockerImage = ''
-
         imageReference = ''
+        dockerImage = ''
     }
 
     //triggers{ cron('H/1 * * * *') }
@@ -46,13 +40,6 @@ pipeline {
             steps {
                 echo 'Build docker image'
 		        script {
-
-                    if (env.BRANCH_NAME == 'main') {
-                        params.environment = "main"
-                    } else if (env.BRANCH_NAME == 'dev') {
-                        params.environment = "dev"
-                    }
-
                     imageReference = "node${params.environment}:${params.tag}"
                     dockerImage = docker.build imageReference
 			    }
@@ -76,56 +63,18 @@ pipeline {
 	    	    script {
                     def run_containers = sh(returnStdout: true, script: 'docker container ps -q').replaceAll("\n", " ")
                     def all_containers = sh(returnStdout: true, script: 'docker container ps -aq').replaceAll("\n", " ")
+                    
                     if (run_containers){
                         sh "docker container kill ${run_containers}"
                     }
+
                     if (all_containers){
                         sh "docker container rm ${all_containers}"
                     }
 
-                    def port = "3000"
-                    if (env.BRANCH_NAME == 'main') {
-                        port = '3000'
-                    } else if (env.BRANCH_NAME == 'dev') {
-                        port = '3001'
-                    }
-
-                    sh "docker run -d --expose ${port} -p ${port}:3000 node${params.environment}:${params.tag}" 
-                    /*
-                    def port = ""
-                    if (env.BRANCH_NAME == 'main') {
-                        port = '3000'
-                    } else if (env.BRANCH_NAME == 'dev') {
-                        port = '3001'
-                    }
-                    sh "docker run -d --expose ${port} -p ${port}:3000 ${imageName}"
-
-	    		    */
-                    //dockerImage = "${registryNamespace}/${imageReference}"
-                    //sh "echo ${dockerImage}"
-                    //docker.withRegistry('', 'docker_id') {
-                    //    dockerImage.push()
-                    //}
+                    sh "docker run -d --expose 3000 -p 3000:3000 node${params.environment}:${params.tag}" 
                 }
 	    	}
         }  
     }
-
-
-    /*
-    post ('Clean docker image') {
-        success {
-            script {
-                sh 'docker rmi orcsin/nodemain:v1.0'
-                def branchName = env.BRANCH_NAME
-                if (branchName == 'dev') {
-                    postJobName = 'Deploy_to_dev'
-                } else if (branchName == 'main') {
-                    postJobName = 'Deploy_to_main'
-                }
-                build job: postJobName, parameters: [string(name: 'IMAGE_REFERENCE', value: imageReference)]
-            }
-        }
-    }
-    */
 }
