@@ -1,25 +1,13 @@
 pipeline {
     agent any
-
-    parameters {
-        choice(name: 'environment', choices: ['main', 'dev'], description: 'deploying environmanet')
-        choice(name: 'tag', choices: ['v1.0', 'v1.1'], description: 'tag')
-    }
-    
+ 
     environment {
 	    registryNamespace = "orcsin"
-        repositoryName = "nodemain"
-        imageName2 = "${registryNamespace}/${repositoryName}"
-        imageName3 = "${repositoryName}"
-        //dockerImageName = ""
         registryDocker = "orcsin/lab3"
         registryCredential = 'docker_id'
-        dockerImage = ''
-
         imageReference = ''
+        dockerImage = ''
     }
-
-    //triggers{ cron('H/1 * * * *') }
 
     stages {
         stage('Checkout') {
@@ -46,17 +34,14 @@ pipeline {
             steps {
                 echo 'Build docker image'
 		        script {
-                    dockerImageName = ""
-                    if (GIT_BRANCH == 'main') {
-                        params.environment = "main"
-                    } else if (GIT_BRANCH == 'dev') {
-                        params.environment = "dev"
+                    def imageName = ''
+                    if (env.BRANCH_NAME == 'main') {
+                        imageName = "main"
+                    } else if (env.BRANCH_NAME == 'dev') {
+                        imageName = "dev"
                     }
-                    //sh "echo ${dockerImageName}"
-                    //sh "docker build -t node${params.environment}:${params.tag} ."
-                    //sh "docker build -t ${imageName}:v1.0 ."
 
-                    imageReference = "node${params.environment}:${params.tag}"
+                    imageReference = "node${imageName}:v1.0"
                     dockerImage = docker.build imageReference
 			    }
             }
@@ -84,26 +69,17 @@ pipeline {
                     }
                     if (all_containers){
                         sh "docker container rm ${all_containers}"
-                    }
-
-                    def port = "3000"
-                    if (env.BRANCH_NAME == 'main') {
-                        port = '3000'
-                    } else if (env.BRANCH_NAME == 'dev') {
-                        port = '3001'
-                    }
-
-                    sh "docker run -d --expose ${port} -p ${port}:3000 node${params.environment}:${params.tag}" 
-                    /*
+                    }              
+                    
                     def port = ""
                     if (env.BRANCH_NAME == 'main') {
                         port = '3000'
                     } else if (env.BRANCH_NAME == 'dev') {
                         port = '3001'
                     }
-                    sh "docker run -d --expose ${port} -p ${port}:3000 ${imageName}"
+                    sh "docker run -d --expose ${port} -p ${port}:3000 ${imageReference}"
 
-	    		    */
+	    		    
                     //dockerImage = "${registryNamespace}/${imageReference}"
                     //sh "echo ${dockerImage}"
                     //docker.withRegistry('', 'docker_id') {
