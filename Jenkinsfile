@@ -1,22 +1,12 @@
 pipeline {
     agent any
-/*
-    parameters {
-        choice(name: 'environment', choices: ['main', 'dev'], description: 'deploying environmanet')
-        choice(name: 'tag', choices: ['v1.0', 'v1.1'], description: 'tag')
-    }
-*/ 
+ 
     environment {
 	    registryNamespace = "orcsin"
-        repositoryName = "nodemain"
-        imageName2 = "${registryNamespace}/${repositoryName}"
-        imageName3 = "${repositoryName}"
-        //dockerImageName = ""
         registryDocker = "orcsin/lab3"
         registryCredential = 'docker_id'
-        dockerImage = ''
-
         imageReference = ''
+        dockerImage = ''
     }
 
     stages {
@@ -79,17 +69,7 @@ pipeline {
                     }
                     if (all_containers){
                         sh "docker container rm ${all_containers}"
-                    }
-/*
-                    def port = "3000"
-                    if (env.BRANCH_NAME == 'main') {
-                        port = '3000'
-                    } else if (env.BRANCH_NAME == 'dev') {
-                        port = '3001'
-                    }
-
-                    sh "docker run -d --expose ${port} -p ${port}:3000 node${params.environment}:${params.tag}" 
-*/                   
+                    }              
                     
                     def port = ""
                     if (env.BRANCH_NAME == 'main') {
