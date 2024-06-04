@@ -100,6 +100,7 @@ pipeline {
                     sh "docker run -d --expose ${port} -p ${port}:3000 ${imageName}"
 
 	    		    */
+                    dockerImage = "${registryNamespace}/${dockerImage}"
                     docker.withRegistry('', 'docker_id') {
                         dockerImage.push()
                     }
