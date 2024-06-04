@@ -1,11 +1,11 @@
 pipeline {
     agent any
-
+/*
     parameters {
         choice(name: 'environment', choices: ['main', 'dev'], description: 'deploying environmanet')
         choice(name: 'tag', choices: ['v1.0', 'v1.1'], description: 'tag')
     }
-    
+*/ 
     environment {
 	    registryNamespace = "orcsin"
         repositoryName = "nodemain"
@@ -18,8 +18,6 @@ pipeline {
 
         imageReference = ''
     }
-
-    //triggers{ cron('H/1 * * * *') }
 
     stages {
         stage('Checkout') {
@@ -46,14 +44,14 @@ pipeline {
             steps {
                 echo 'Build docker image'
 		        script {
-
+                    def imageName = ''
                     if (env.BRANCH_NAME == 'main') {
-                        params.environment = "main"
+                        imageName = "main"
                     } else if (env.BRANCH_NAME == 'dev') {
-                        params.environment = "dev"
+                        imageName = "dev"
                     }
 
-                    imageReference = "node${params.environment}:${params.tag}"
+                    imageReference = "node${imageName}:v1.0"
                     dockerImage = docker.build imageReference
 			    }
             }
