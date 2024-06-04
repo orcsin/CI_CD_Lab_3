@@ -101,7 +101,7 @@ pipeline {
 
 	    		    */
                     docker.withRegistry('', 'docker_id') {
-                        dockerImage.push(${params.tag})
+                        dockerImage.push()
                     }
                 }
 	    	}
