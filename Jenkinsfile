@@ -64,7 +64,7 @@ pipeline {
 	    	    script {
                     def run_containers = sh(returnStdout: true, script: 'docker container ps -q').replaceAll("\n", " ")
                     def all_containers = sh(returnStdout: true, script: 'docker container ps -aq').replaceAll("\n", " ")
-                    def all_containers_pattern = sh(returnStdout: true, script: 'docker ps -q --filter "ancestor=${imageReference}"').replaceAll("\n", " ")
+                    def all_containers_pattern = sh(returnStdout: true, script: 'docker ps -q --filter \"ancestor=${imageReference}\"').replaceAll("\n", " ")
                     if (run_containers){
                         sh "docker container kill ${run_containers}"
                     }
