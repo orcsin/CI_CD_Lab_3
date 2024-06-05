@@ -80,10 +80,13 @@ pipeline {
                     } else if (env.BRANCH_NAME == 'dev') {
                         port = '3001'
                     }
-                    sh "docker run -d --expose ${port} -p ${port}:3000 ${imageReference}"
-                    sleep 5
-                    sh "docker container stop ${imageReference}"
-                    sleep 11
+                    def container = dockerImage.run("--expose ${port} -p ${port}:3000")
+                    sleep 10
+                    container.stop()
+                    //sh "docker run -d --expose ${port} -p ${port}:3000 ${imageReference}"
+                    //sleep 5
+                    //sh "docker container stop ${imageReference}"
+                    //sleep 11
                 }
 	    	}
         }
