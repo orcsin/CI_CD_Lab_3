@@ -81,6 +81,9 @@ pipeline {
                         port = '3001'
                     }
                     sh "docker run -d --expose ${port} -p ${port}:3000 ${imageReference}"
+                    sleep 5
+                    sh "docker container stop ${imageReference}"
+                    sleep 11
                 }
 	    	}
         }
