@@ -109,7 +109,7 @@ pipeline {
                 } else if (branchName == 'main') {
                     postJobName = 'Deploy_to_main'
                 }
-                build job: ${postJobName}
+                build job: "${postJobName}"
                 //build(job: ${postJobName}, parameters: [credentials(name: 'parameter-name', value: 'docker_id')])
                 //build job: postJobName, parameters: [string(name: 'IMAGE_REFERENCE', value: imageReference)]
             }
