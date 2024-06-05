@@ -2,7 +2,7 @@ pipeline {
     agent any
  
     environment {
-	    registryNamespace = "orcsin"
+	    dockerNamespace = "orcsin"
         registryDocker = "orcsin/lab3"
         registryCredential = 'docker_id'
         imageReference = ''
@@ -16,6 +16,7 @@ pipeline {
 		        checkout scm
             }
         }
+
         stage('Build') {
             steps {
                 echo 'Building'
@@ -23,6 +24,7 @@ pipeline {
 		        sh 'scripts/build.sh'
             }
         }
+
         stage('Test') {
             steps {
 		        echo 'Testing'
@@ -30,6 +32,7 @@ pipeline {
 		        sh 'scripts/test.sh'
             }
         }
+
         stage('Build docker image') {
             steps {
                 echo 'Build docker image'
@@ -41,7 +44,7 @@ pipeline {
                         imageName = "dev"
                     }
 
-                    imageReference = "node${imageName}:v1.0"
+                    imageReference = "${dockerNamespace}/node${imageName}:v1.0"
                     dockerImage = docker.build imageReference
 			    }
             }
@@ -60,7 +63,6 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying Example'
-                
 	    	    script {
                     def run_containers = sh(returnStdout: true, script: 'docker container ps -q').replaceAll("\n", " ")
                     def all_containers = sh(returnStdout: true, script: 'docker container ps -aq').replaceAll("\n", " ")
@@ -79,13 +81,6 @@ pipeline {
                         port = '3001'
                     }
                     sh "docker run -d --expose ${port} -p ${port}:3000 ${imageReference}"
-
-	    		    
-                    //dockerImage = "${registryNamespace}/${imageReference}"
-                    //sh "echo ${dockerImage}"
-                    //docker.withRegistry('', 'docker_id') {
-                    //    dockerImage.push()
-                    //}
                 }
 	    	}
         }
@@ -93,10 +88,10 @@ pipeline {
         stage('Push') {
             steps {
                 script {
-                    dockerImage = "${registryNamespace}/${imageReference}"
+                    //dockerImage = "${registryNamespace}/${imageReference}"
                     sh "echo ${dockerImage}"
                     docker.withRegistry('', 'docker_id') {
-                        docker.image(dockerImage)push('latest')
+                        docker.image(imageReference)push('latest')
                         //dockerImage.push('last')
                     }   
                 }
