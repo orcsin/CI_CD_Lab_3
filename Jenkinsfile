@@ -88,7 +88,15 @@ pipeline {
                     //}
                 }
 	    	}
-        }  
+        }
+
+        stage('Push') {
+            dockerImage = "${registryNamespace}/${imageReference}"
+            sh "echo ${dockerImage}"
+            docker.withRegistry('', 'docker_id') {
+                dockerImage.push()
+            }
+        }
     }
 
 
