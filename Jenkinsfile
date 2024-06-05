@@ -88,11 +88,9 @@ pipeline {
         stage('Push') {
             steps {
                 script {
-                    //dockerImage = "${registryNamespace}/${imageReference}"
                     sh "echo ${dockerImage}"
                     docker.withRegistry('', 'docker_id') {
-                        docker.image(imageReference)push('latest')
-                        //dockerImage.push('last')
+                        docker.image(imageReference).push('latest')
                     }   
                 }
             }
