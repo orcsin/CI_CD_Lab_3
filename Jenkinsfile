@@ -2,7 +2,7 @@ pipeline {
     agent any
  
     environment {
-	    registryNamespace = "orcsin"
+	    dockerNamespace = "orcsin"
         registryDocker = "orcsin/lab3"
         registryCredential = 'docker_id'
         imageReference = ''
@@ -16,6 +16,7 @@ pipeline {
 		        checkout scm
             }
         }
+
         stage('Build') {
             steps {
                 echo 'Building'
@@ -23,6 +24,7 @@ pipeline {
 		        sh 'scripts/build.sh'
             }
         }
+
         stage('Test') {
             steps {
 		        echo 'Testing'
@@ -30,6 +32,7 @@ pipeline {
 		        sh 'scripts/test.sh'
             }
         }
+
         stage('Build docker image') {
             steps {
                 echo 'Build docker image'
@@ -41,7 +44,7 @@ pipeline {
                         imageName = "dev"
                     }
 
-                    imageReference = "node${imageName}:v1.0"
+                    imageReference = "${dockerNamespace}/node${imageName}:v1.0"
                     dockerImage = docker.build imageReference
 			    }
             }
@@ -60,15 +63,15 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying Example'
-                
 	    	    script {
                     def run_containers = sh(returnStdout: true, script: 'docker container ps -q').replaceAll("\n", " ")
                     def all_containers = sh(returnStdout: true, script: 'docker container ps -aq').replaceAll("\n", " ")
+                    def all_containers_pattern = sh(returnStdout: true, script: "docker ps -aq --filter ancestor=${imageReference}").replaceAll("\n", " ")
                     if (run_containers){
                         sh "docker container kill ${run_containers}"
                     }
                     if (all_containers){
-                        sh "docker container rm ${all_containers}"
+                        sh "docker container rm ${all_containers_pattern} | true"
                     }              
                     
                     def port = ""
@@ -78,33 +81,37 @@ pipeline {
                         port = '3001'
                     }
                     sh "docker run -d --expose ${port} -p ${port}:3000 ${imageReference}"
-
-	    		    
-                    //dockerImage = "${registryNamespace}/${imageReference}"
-                    //sh "echo ${dockerImage}"
-                    //docker.withRegistry('', 'docker_id') {
-                    //    dockerImage.push()
-                    //}
                 }
 	    	}
-        }  
+        }
+
+        stage('Push') {
+            steps {
+                script {
+                    sh "echo ${dockerImage}"
+                    docker.withRegistry('', 'docker_id') {
+                        docker.image(imageReference).push('latest')
+                    }   
+                }
+            }
+        }
     }
 
 
-    /*
+    
     post ('Clean docker image') {
         success {
             script {
-                sh 'docker rmi orcsin/nodemain:v1.0'
                 def branchName = env.BRANCH_NAME
                 if (branchName == 'dev') {
                     postJobName = 'Deploy_to_dev'
                 } else if (branchName == 'main') {
                     postJobName = 'Deploy_to_main'
                 }
-                build job: postJobName, parameters: [string(name: 'IMAGE_REFERENCE', value: imageReference)]
+                build job: "${postJobName}"
+
             }
         }
     }
-    */
+    
 }
