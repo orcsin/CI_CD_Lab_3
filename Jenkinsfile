@@ -3,8 +3,6 @@ pipeline {
  
     environment {
 	    dockerNamespace = "orcsin"
-        registryDocker = "orcsin/lab3"
-        registryCredential = 'docker_id'
         imageReference = ''
         dockerImage = ''
     }
@@ -83,10 +81,6 @@ pipeline {
                     def container = dockerImage.run("--expose ${port} -p ${port}:3000")
                     sleep 10
                     container.stop()
-                    //sh "docker run -d --expose ${port} -p ${port}:3000 ${imageReference}"
-                    //sleep 5
-                    //sh "docker container stop ${imageReference}"
-                    //sleep 11
                 }
 	    	}
         }
@@ -102,9 +96,7 @@ pipeline {
             }
         }
     }
-
-
-    
+ 
     post ('Clean docker image') {
         success {
             script {
@@ -115,9 +107,7 @@ pipeline {
                     postJobName = 'Deploy_to_main'
                 }
                 build job: "${postJobName}"
-
             }
         }
     }
-    
 }
