@@ -1,3 +1,5 @@
+@Library('JenkinsTesLib@main')
+
 pipeline {
     agent any
  
@@ -61,6 +63,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying Example'
+                DeployToMaster 'This is a Shared libs'
 	    	    script {
                     def run_containers = sh(returnStdout: true, script: 'docker container ps -q').replaceAll("\n", " ")
                     def all_containers = sh(returnStdout: true, script: 'docker container ps -aq').replaceAll("\n", " ")
